@@ -5,10 +5,11 @@ import random
 import math
 import tensorflow as tf
 from tensorflow.keras.preprocessing import image
-from tensorflow.keras.applications.vgg16 import preprocess_input
-from tensorflow.keras.applications.vgg16 import VGG16
+from tensorflow.keras.applications.vgg19 import preprocess_input
+from tensorflow.keras.applications.vgg19 import VGG19
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' # Only show TensorFlow warnings and errors
 import joblib
+from vgg import myVGG
 
 
 type_to_label = {}
@@ -99,9 +100,14 @@ print("Num of Images in Train Data: " + str(len(train_X)))
 print("Validation Data Created!")
 print("Num of Images in Validation Data: " + str(len(vali_X)))
 
-base_model = VGG16(include_top=False, input_shape=(IMG_SIZE, IMG_SIZE, 3), pooling="avg", weights='imagenet')
-# base_model.summary()
+base_model = VGG19(include_top=False, input_shape=(IMG_SIZE, IMG_SIZE, 3), pooling="avg", weights='imagenet')
+base_model.summary()
 base_model.trainable = False
+
+content_layer = "block4_conv1"
+test_model = myVGG(content_layer)
+
+
 
 train_X_Feature = []
 train_y_Feature = []
@@ -111,6 +117,8 @@ vali_X_Feature = []
 shrink = 0.1
 for i in tqdm(range(math.floor(shrink*len(train_X)))):
   x_Feature = base_model.predict(train_X[i])
+  # x_Feature = test_model(train_X[i])
+
   x_Feature = np.array(x_Feature)
   train_X_Feature.append(x_Feature.flatten())
   train_y_Feature.append(train_y[i])
@@ -118,6 +126,8 @@ for i in tqdm(range(math.floor(shrink*len(train_X)))):
 
 for i in tqdm(range(math.floor(shrink*len(vali_X)))):
   x_Feature = base_model.predict(vali_X[i])
+  # x_Feature = test_model(vali_X[i])
+
   x_Feature = np.array(x_Feature)
   vali_X_Feature.append(x_Feature.flatten())
   vali_y_Feature.append(vali_y[i])
