@@ -8,9 +8,6 @@ from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.vgg16 import preprocess_input
 from tensorflow.keras.applications.vgg16 import VGG16
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' # Only show TensorFlow warnings and errors
-from sklearn.linear_model import SGDClassifier
-from shared import simple_boxplot
-from sklearn.utils import resample
 import joblib
 
 
@@ -103,7 +100,7 @@ print("Validation Data Created!")
 print("Num of Images in Validation Data: " + str(len(vali_X)))
 
 base_model = VGG16(include_top=False, input_shape=(IMG_SIZE, IMG_SIZE, 3), pooling="avg", weights='imagenet')
-base_model.summary()
+# base_model.summary()
 base_model.trainable = False
 
 train_X_Feature = []
