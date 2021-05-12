@@ -132,7 +132,7 @@ for i in tqdm(range(math.floor(shrink*len(vali_X)))):
   vali_X_Feature.append(x_Feature.flatten())
   vali_y_Feature.append(vali_y[i])
 
-data_dir = "./featuredata"
+data_dir = "./featuredata/vgg"
 try:
   os.mkdir(data_dir)
 except FileExistsError:
